@@ -47,16 +47,17 @@ def on_press(key, user_id):
 
 
 def on_release(key, user_id, signal):
-    if key == keyboard.Key.home:
-        print('home pressed...')
-        signal.signal_state_changed.emit()
-
     if hasattr(key, 'char'):
         key = key.char
     else:
         key = ' '
 
-    press_timestamp = time_pressed[key]
+    try:
+        press_timestamp = time_pressed[key]
+    except Exception as e:
+        print(e)
+        return
+
     release_timestamp = datetime.datetime.now()
 
     if not press_timestamp:
@@ -220,7 +221,6 @@ def get_seek_time(user_id):
     return get_duration_keystroke(user_id) + get_flight_time(user_id)
 
 
- 
 def start_tracking(user_id, signal):
     print('starting tracking...')
     logger.info('Starting tracking...')
